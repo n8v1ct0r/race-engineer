@@ -1,0 +1,46 @@
+{
+  "schema": "race-engineer.notes/v1",
+  "kind": "fake-model",
+  "fake": true,
+  "generator": "FakeNotesClient via scripts/check-notes.ts --write-fixtures. Not model output.",
+  "key": "bce6771cf37ae4b952aa81814b5af4d7175f7906cc3f87054a6f7612ecd6089b",
+  "model": "fake-notes-client",
+  "prompt_version": "notes-v3",
+  "validator_version": "numcheck-v3",
+  "session_id": "synthetic-demo",
+  "a": "CCC-1",
+  "b": "BBB-1",
+  "notes": [
+    {
+      "finding_id": "gain-1",
+      "text": "T1 gains 0.398 s on the brakes, 66 m later than BBB.",
+      "source": "model"
+    },
+    {
+      "finding_id": "gain-2",
+      "text": "T11 gains 0.240 s. Your exit speed is 6 km/h higher.",
+      "source": "model"
+    },
+    {
+      "finding_id": "gain-3",
+      "text": "T12 gains 0.063 s. No single cause shows in the data.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-1",
+      "text": "T9 loses 0.242 s. Your exit speed is 9 km/h lower.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-2",
+      "text": "T6-7 loses 0.152 s. You carry 124 km/h at the apex, BBB carries 131 km/h.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-3",
+      "text": "T2 loses 0.141 s. You carry 144 km/h at the apex, BBB carries 150 km/h.",
+      "source": "model"
+    }
+  ],
+  "usage": null
+}

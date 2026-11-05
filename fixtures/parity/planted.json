@@ -1,0 +1,83 @@
+{
+  "schema": "race-engineer.planted/v1",
+  "note": "Differences planted by pipeline/synthetic.py (PLANTS). Expected outcomes are stated from driver A's view.",
+  "reference_lap": "AAA-1",
+  "structure": {
+    "group_label": "T6-7",
+    "letter_label": "T12A",
+    "edge_min_label": "T3",
+    "clamped_exit_label": "T12",
+    "dropout": {
+      "lap": "BBB-1",
+      "label": "T11"
+    },
+    "detector_misses": [
+      "3"
+    ],
+    "detector_merges": [
+      [
+        "6",
+        "7"
+      ]
+    ]
+  },
+  "pairs": [
+    {
+      "a": "AAA-1",
+      "b": "BBB-1",
+      "track": true,
+      "anchored": true,
+      "expect": [
+        {
+          "label": "T1",
+          "kind": "gain",
+          "cause": "braking",
+          "brake_word": "later",
+          "plant": "BBB brakes with 60% of the deceleration into T1, so it starts braking about 55 m earlier"
+        },
+        {
+          "label": "T11",
+          "kind": "gain",
+          "cause": "time_only",
+          "plant": "BBB brakes with 60% of the deceleration into T11 (about 41 m earlier), but 3 samples before its brake point are missing, so the braking difference does not beat the sample gap"
+        },
+        {
+          "label": "T6-7",
+          "kind": "loss",
+          "cause": "min_speed",
+          "min_speed_word": "lower",
+          "plant": "BBB carries 7 km/h more through the T7 apex"
+        },
+        {
+          "label": "T9",
+          "kind": "loss",
+          "cause": "exit_speed",
+          "exit_speed_word": "lower",
+          "plant": "BBB has 30% more traction for 120 m after the T9 arc"
+        }
+      ]
+    },
+    {
+      "a": "AAA-1",
+      "b": "CCC-1",
+      "track": true,
+      "anchored": false,
+      "expect": [
+        {
+          "label": "T2",
+          "kind": "gain",
+          "cause": "min_speed",
+          "min_speed_word": "higher",
+          "plant": "CCC carries 6 km/h less through the T2 apex"
+        },
+        {
+          "label": "T11",
+          "kind": "loss",
+          "cause": "exit_speed",
+          "exit_speed_word": "lower",
+          "plant": "CCC has 30% more traction for 120 m after the T11 arc"
+        }
+      ]
+    }
+  ]
+}

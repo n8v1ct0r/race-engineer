@@ -1,0 +1,36 @@
+{
+  "schema": "race-engineer.analysis-config/v1",
+  "grid_step_m": 2,
+  "align": {
+    "knot_step_m": 100,
+    "smooth_half_m": 300,
+    "search_window_m": 150,
+    "min_knot_gap_m": 1
+  },
+  "corners": {
+    "group_m": 100,
+    "exit_offset_m": 75
+  },
+  "detector": {
+    "smooth_window_m": 20,
+    "prominence_kph": 10,
+    "min_spacing_m": 100
+  },
+  "minisectors": {
+    "count": 25,
+    "faint_below_ms": 25
+  },
+  "findings": {
+    "top_n": 3,
+    "min_abs_ms": 30,
+    "level_speed_kph": 3
+  },
+  "qa": {
+    "distance_tolerance_pct": 2,
+    "max_gap_ms": 1500,
+    "anchor_flag_ms": 100
+  },
+  "notes": {
+    "max_chars": 110
+  }
+}

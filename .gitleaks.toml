@@ -1,0 +1,8 @@
+# Default rules, plus one narrow exception: synthetic fake-model fixtures carry a
+# 64-hex cache key ("key") that the generic-api-key rule mistakes for a secret.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Cache-key hashes in synthetic fake-model fixtures. Not credentials."
+paths = ['''fixtures/notes/.*\.fake\.json$''']

@@ -1,0 +1,10 @@
+.next
+node_modules
+pnpm-lock.yaml
+public/data
+public/demo
+fixtures
+.cache
+pipeline/.venv
+docs
+tasks

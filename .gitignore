@@ -1,0 +1,42 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+/test-results
+/playwright-report
+
+# next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# env files: only the example is committed
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# Formula 1 derived data never enters git (docs/phase-1-plan.md, section 1)
+/public/data/
+/.cache/
+
+# python
+pipeline/.venv/
+__pycache__/
+*.pyc
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+.pnpm-debug.log*
+.gstack/
+
+# test reporter output
+/.vitest/

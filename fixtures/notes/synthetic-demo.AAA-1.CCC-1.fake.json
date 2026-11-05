@@ -1,0 +1,36 @@
+{
+  "schema": "race-engineer.notes/v1",
+  "kind": "fake-model",
+  "fake": true,
+  "generator": "FakeNotesClient via scripts/check-notes.ts --write-fixtures. Not model output.",
+  "key": "330daf673524e6cd526834fe000d7b6b8fd4282e0f619d8798678cbbc4fd45da",
+  "model": "fake-notes-client",
+  "prompt_version": "notes-v3",
+  "validator_version": "numcheck-v3",
+  "session_id": "synthetic-demo",
+  "a": "AAA-1",
+  "b": "CCC-1",
+  "notes": [
+    {
+      "finding_id": "gain-1",
+      "text": "T2 gains 0.133 s. You carry 150 km/h at the apex, CCC carries 144 km/h.",
+      "source": "model"
+    },
+    {
+      "finding_id": "gain-2",
+      "text": "T3 gains 0.030 s. No single cause shows in the data.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-1",
+      "text": "T11 loses 0.061 s. Your exit speed is 6 km/h lower.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-2",
+      "text": "T12 loses 0.060 s. No single cause shows in the data.",
+      "source": "model"
+    }
+  ],
+  "usage": null
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "race-engineer.manifest/v1",
+  "sessions": [
+    {
+      "session_id": "synthetic-demo",
+      "origin": "synthetic",
+      "season": null,
+      "round": null,
+      "event_name": "Synthetic demo",
+      "location": "Synthetic",
+      "location_slug": "demo",
+      "session_code": "Q",
+      "session_name": "Qualifying",
+      "date": null,
+      "track_id": "synthetic-loop",
+      "corner_source": "official",
+      "default_pair": {
+        "a": "AAA-1",
+        "b": "BBB-1"
+      },
+      "drivers": [
+        {
+          "code": "AAA",
+          "laps": [
+            {
+              "lap_id": "AAA-1",
+              "lap_no": 1,
+              "duration_ms": 85275,
+              "sector_ms": [
+                26940,
+                30000,
+                28335
+              ],
+              "segment": null,
+              "compound": null,
+              "tyre_life": null,
+              "personal_best": true,
+              "deleted": false,
+              "deleted_reason": null,
+              "yellow": null,
+              "qa": "ok",
+              "qa_notes": []
+            }
+          ]
+        },
+        {
+          "code": "BBB",
+          "laps": [
+            {
+              "lap_id": "BBB-1",
+              "lap_no": 1,
+              "duration_ms": 85371,
+              "sector_ms": [
+                27341,
+                29573,
+                28457
+              ],
+              "segment": null,
+              "compound": null,
+              "tyre_life": null,
+              "personal_best": true,
+              "deleted": false,
+              "deleted_reason": null,
+              "yellow": null,
+              "qa": "ok",
+              "qa_notes": []
+            }
+          ]
+        },
+        {
+          "code": "CCC",
+          "laps": [
+            {
+              "lap_id": "CCC-1",
+              "lap_no": 1,
+              "duration_ms": 85341,
+              "sector_ms": null,
+              "segment": null,
+              "compound": null,
+              "tyre_life": null,
+              "personal_best": true,
+              "deleted": false,
+              "deleted_reason": null,
+              "yellow": null,
+              "qa": "low_confidence",
+              "qa_notes": [
+                "Throttle unknown at 2 samples",
+                "Brake unknown at 1 sample",
+                "Gear unknown at 1 sample"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "pipeline/synthetic.py",
+        "seed": 20260923,
+        "reference_lap": "AAA-1"
+      }
+    }
+  ]
+}

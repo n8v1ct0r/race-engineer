@@ -1,0 +1,46 @@
+{
+  "schema": "race-engineer.notes/v1",
+  "kind": "fake-model",
+  "fake": true,
+  "generator": "FakeNotesClient via scripts/check-notes.ts --write-fixtures. Not model output.",
+  "key": "779f11f7702f4bfd109a2f0f3d2b5868d830eb32cd87347f8a3be7be432ffde4",
+  "model": "fake-notes-client",
+  "prompt_version": "notes-v3",
+  "validator_version": "numcheck-v3",
+  "session_id": "synthetic-demo",
+  "a": "BBB-1",
+  "b": "CCC-1",
+  "notes": [
+    {
+      "finding_id": "gain-1",
+      "text": "T9 gains 0.242 s. Your exit speed is 9 km/h higher.",
+      "source": "model"
+    },
+    {
+      "finding_id": "gain-2",
+      "text": "T6-7 gains 0.152 s. You carry 131 km/h at the apex, CCC carries 124 km/h.",
+      "source": "model"
+    },
+    {
+      "finding_id": "gain-3",
+      "text": "T2 gains 0.141 s. You carry 150 km/h at the apex, CCC carries 144 km/h.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-1",
+      "text": "T1 loses 0.398 s on the brakes, 66 m earlier than CCC.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-2",
+      "text": "T11 loses 0.240 s. Your exit speed is 6 km/h lower.",
+      "source": "model"
+    },
+    {
+      "finding_id": "loss-3",
+      "text": "T12 loses 0.063 s. No single cause shows in the data.",
+      "source": "model"
+    }
+  ],
+  "usage": null
+}

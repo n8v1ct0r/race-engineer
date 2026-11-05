@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/n8v1ct0r/race-engineer/blob/main/lap-schema.json",
+  "title": "Lap",
+  "description": "One lap as parallel arrays. Every array in samples has the same length, t_ms strictly increases, t_ms spans exactly duration_ms (last minus first), and sector_ms, when present, sums to duration_ms (checked by scripts/validate-laps.ts, since JSON Schema cannot compare arrays). Units are in the field names. x and y are meters in any fixed, flat frame for that track.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "origin", "track_id", "lap_no", "duration_ms", "valid", "samples"],
+  "properties": {
+    "schema": { "const": "race-engineer.lap/v1" },
+    "origin": { "enum": ["fastf1", "synthetic", "photoncar"] },
+    "track_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Two laps compare only when track_id matches."
+    },
+    "session_id": { "type": "string", "minLength": 1 },
+    "driver": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "lap_no": { "type": "integer", "minimum": 0 },
+    "duration_ms": { "type": "integer", "minimum": 1 },
+    "sector_ms": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        { "type": "null" }
+      ]
+    },
+    "valid": { "type": "boolean" },
+    "meta": {
+      "type": "object",
+      "description": "Producer-specific fields, for example provenance or Photoncar line_id."
+    },
+    "samples": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t_ms", "dist_m", "speed_kph", "throttle_pct", "brake", "gear", "rpm", "x", "y"],
+      "properties": {
+        "t_ms": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "dist_m": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "speed_kph": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "throttle_pct": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }
+        },
+        "brake": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": ["boolean", "null"] }
+        },
+        "gear": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": ["integer", "null"], "minimum": 0, "maximum": 10 }
+        },
+        "rpm": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": ["number", "null"], "minimum": 0 }
+        },
+        "x": { "type": "array", "minItems": 2, "items": { "type": "number" } },
+        "y": { "type": "array", "minItems": 2, "items": { "type": "number" } }
+      }
+    }
+  }
+}

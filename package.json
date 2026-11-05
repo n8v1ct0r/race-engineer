@@ -1,0 +1,54 @@
+{
+  "name": "race-engineer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Race Engineer: Formula 1 qualifying laps, compared corner by corner. Code computes every number.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:py": "python3 -m unittest discover -s pipeline/tests -t .",
+    "synthetic": "python3 pipeline/synthetic.py",
+    "export": "pipeline/.venv/bin/python pipeline/export_sessions.py",
+    "validate:laps": "node scripts/validate-laps.ts",
+    "check:notes": "node scripts/check-notes.ts",
+    "check:copy": "node scripts/copy-lint.ts",
+    "verify:data": "node scripts/verify-data.ts",
+    "e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
+    "e2e:install": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium",
+    "check": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test && pnpm test:py && pnpm validate:laps && pnpm check:notes && pnpm check:copy"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.128.0",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "uplot": "1.6.32"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.20.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "ajv": "8.20.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.6",
+    "prettier": "3.9.9",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
+  },
+  "packageManager": "pnpm@10.13.1"
+}

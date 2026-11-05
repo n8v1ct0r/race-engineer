@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/n8v1ct0r/race-engineer/blob/main/track-schema.json",
+  "title": "Track",
+  "description": "Optional per-session track context. Analysis runs on laps alone; this file adds a shared reference path, official corner labels, and sector lines for anchoring. Positions are meters along the reference lap (the common axis s in [0, L_m]). path arrays have equal length and s_m strictly increases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "track_id", "L_m", "reference", "path", "corners", "sector_lines_m"],
+  "properties": {
+    "schema": { "const": "race-engineer.track/v1" },
+    "track_id": { "type": "string", "minLength": 1 },
+    "L_m": { "type": "number", "exclusiveMinimum": 0 },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lap_id"],
+      "properties": {
+        "lap_id": { "type": "string", "minLength": 1 },
+        "driver": { "type": ["string", "null"] },
+        "lap_no": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["s_m", "x", "y", "speed_kph"],
+      "properties": {
+        "s_m": { "type": "array", "minItems": 2, "items": { "type": "number", "minimum": 0 } },
+        "x": { "type": "array", "minItems": 2, "items": { "type": "number" } },
+        "y": { "type": "array", "minItems": 2, "items": { "type": "number" } },
+        "speed_kph": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "corners": {
+      "description": "Official corner markers only (FastF1 circuit info), one per marker, in lap order. Empty when the source has none; analysis then detects corners from speed minima and labels them C1..Cn.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "s_m"],
+        "properties": {
+          "label": { "type": "string", "pattern": "^[0-9]{1,2}[A-Z]?$" },
+          "s_m": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "sector_lines_m": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "number", "exclusiveMinimum": 0 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        { "type": "null" }
+      ]
+    }
+  }
+}

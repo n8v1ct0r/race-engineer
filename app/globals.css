@@ -1,0 +1,475 @@
+@import "tailwindcss";
+
+/*
+ * Visual system: Plot sheet (docs/phase-1-plan.md section 5).
+ * Six named colors, three allowed tints over Paper, two typefaces, a 4 px spacing base,
+ * 2 px radius on controls only, 1 px hairlines instead of cards, no motion except the replay.
+ * `static` keeps every color variable in the output, because the charts and map read them at
+ * draw time with getComputedStyle.
+ */
+@theme static {
+  --color-*: initial;
+  /* Night sheet: the Plot sheet's six roles, set for a dark pit wall. Contrast on Paper:
+     Ink 16.4:1, Graphite 7.4:1, Driver A 6.9:1, Driver B 9.1:1. */
+  --color-paper: #0d0f13;
+  --color-ink: #e8ebf0;
+  --color-graphite: #9ba2ad;
+  --color-rule: #2b3038;
+  --color-driver-a: #a88beb;
+  --color-driver-b: #e3a845;
+  /* Allowed tints, composited over Paper: Rule 50%, A 12%, B 16%. */
+  --color-rule-tint: #1c2025;
+  --color-a-tint: #201e2d;
+  --color-b-tint: #2f281b;
+
+  --radius-*: initial;
+  --radius-control: 2px;
+  --radius-full: 9999px;
+
+  /* No shadow utilities: panels are split by hairlines, never lifted (plan section 5). */
+  --shadow-*: initial;
+
+  --animate-*: initial;
+  --motion-duration: 0ms;
+}
+
+/* Phone first. Values switch at 48rem (768 px), where controls drop to 14 px. */
+:root {
+  --ui-sans: var(--font-atkinson-next), ui-sans-serif, system-ui, sans-serif;
+  --ui-mono: var(--font-atkinson-mono), ui-monospace, monospace;
+  --fs-title: 20px;
+  --fs-control: 16px;
+  --fs-readout: 18px;
+  --control-h: 44px;
+  --gutter: 16px;
+  --strip-h: 32px;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --fs-title: 24px;
+    --fs-control: 14px;
+    --fs-readout: 20px;
+    --control-h: 36px;
+    --gutter: 32px;
+  }
+}
+
+@theme inline {
+  --font-*: initial;
+  --font-sans: var(--ui-sans);
+  --font-mono: var(--ui-mono);
+
+  --text-*: initial;
+  --text-title: var(--fs-title);
+  --text-title--line-height: 1.2;
+  --text-title--font-weight: 700;
+  --text-panel: 16px;
+  --text-panel--line-height: 1.3;
+  --text-panel--font-weight: 700;
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-control: var(--fs-control);
+  --text-control--line-height: 1.4;
+  --text-control--font-weight: 500;
+  --text-meta: 13px;
+  --text-meta--line-height: 1.4;
+  --text-tick: 12px;
+  --text-tick--line-height: 1.2;
+  --text-readout: var(--fs-readout);
+  --text-readout--line-height: 1.2;
+  --text-readout--font-weight: 500;
+  --text-data: 14px;
+  --text-data--line-height: 1.4;
+
+  --spacing-gutter: var(--gutter);
+  --spacing-control: var(--control-h);
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    scrollbar-color: var(--color-graphite) var(--color-paper);
+    caret-color: var(--color-ink);
+    scroll-behavior: auto;
+    /* The compare page sets --sticky-h to its sticky readout's height, so focus and corner jumps
+       never land under it (WCAG 2.2 2.4.11). 0 on every other page. */
+    scroll-padding-top: calc(var(--strip-h) + var(--sticky-h, 0px) + 8px);
+    /* Keep the scrollbar's space when a page grows past the viewport, so nothing jumps sideways
+       while a compare page loads. */
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-paper);
+    padding-top: var(--strip-h);
+    font-family: var(--ui-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    font-feature-settings: "tnum" 1;
+  }
+
+  ::selection {
+    background: var(--color-rule);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: var(--color-ink);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* 14 px, the data size on the type scale. Every code element sits in 16 px body text. */
+  code,
+  kbd {
+    font-family: var(--ui-mono);
+    font-size: 14px;
+  }
+
+  canvas,
+  svg {
+    forced-color-adjust: none;
+  }
+}
+
+@layer components {
+  /* Native select with a drawn chevron: 1 px Graphite boundary (6.49:1), 2 px radius. */
+  .select {
+    appearance: none;
+    min-height: var(--control-h);
+    border: 1px solid var(--color-graphite);
+    border-radius: var(--radius-control);
+    background-color: var(--color-paper);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%239BA2AD' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding: 0 32px 0 10px;
+    color: var(--color-ink);
+    font: 500 var(--fs-control) / 1.4 var(--ui-sans);
+    max-width: 100%;
+  }
+
+  .select:hover {
+    background-color: var(--color-rule-tint);
+  }
+
+  .select:disabled {
+    border-color: var(--color-rule);
+    color: var(--color-graphite);
+    cursor: not-allowed;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: var(--control-h);
+    padding: 0 14px;
+    border: 1px solid var(--color-graphite);
+    border-radius: var(--radius-control);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font: 500 var(--fs-control) / 1.4 var(--ui-sans);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background: var(--color-rule-tint);
+  }
+
+  .btn-primary {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .btn-primary:hover {
+    border-color: var(--color-graphite);
+    background: var(--color-graphite);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    border-color: var(--color-rule);
+    background: var(--color-paper);
+    color: var(--color-graphite);
+    cursor: not-allowed;
+  }
+
+  .btn[aria-pressed="true"] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Static loading block: Rule fill, no shimmer (plan section 5, motion). */
+  .skeleton {
+    background: var(--color-rule);
+  }
+
+  .sr-only-live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* uPlot, restyled to the sheet. The crosshair is 1 px Ink; no drag selection. */
+.telemetry .uplot {
+  font-family: var(--ui-sans);
+  width: 100%;
+}
+
+/* Beats uPlot's own .u-hz .u-cursor-x rule (dashed), which loads after this file. */
+.telemetry .uplot.u-hz .u-cursor-x {
+  border-right: 1px solid var(--color-ink);
+}
+
+.telemetry .u-select {
+  display: none;
+}
+
+.telemetry .u-over {
+  touch-action: pan-y;
+}
+
+/* Driver B's hover point is a diamond: the element stays square, the SVG inside draws the shape. */
+.telemetry .u-cursor-pt.pt-diamond {
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+.telemetry .ghost-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  pointer-events: none;
+}
+
+/* Range input for the replay scrub: Graphite track (6.49:1 on Paper, above the 3:1 bar for a
+   control's boundary), Ink thumb 24 px, 44 px hit area. */
+.scrub {
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+
+.scrub::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--color-graphite);
+}
+
+.scrub::-moz-range-track {
+  height: 2px;
+  background: var(--color-graphite);
+}
+
+.scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -11px;
+  border: 2px solid var(--color-paper);
+  border-radius: 9999px;
+  background: var(--color-ink);
+}
+
+.scrub::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-paper);
+  border-radius: 9999px;
+  background: var(--color-ink);
+}
+
+.scrub:focus-visible {
+  outline: none;
+}
+
+.scrub:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.scrub:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* Shared honesty strip (nate-victor.com shared/STRIP.md): one 32 px bar across all six
+   sidequests. Its colors are fixed by that spec, not by this app's tokens. */
+.honesty-strip {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--strip-h);
+  padding: 0 var(--gutter);
+  background: #0b0b0c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(237, 237, 237, 0.72);
+  font:
+    400 11px / 1 var(--font-plex-mono),
+    ui-monospace,
+    monospace;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.honesty-strip a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.honesty-strip a:hover {
+  color: #ededed;
+  text-decoration: underline;
+}
+
+.honesty-strip .hs-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.honesty-strip .hs-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+@media (max-width: 47.99rem) {
+  .honesty-strip .hs-center {
+    display: none;
+  }
+}
+
+/* Team radio: the engineer's calls arrive as the replay passes each corner. The newest call
+   lands with one short fade from the A tint, the page's only entrance motion. */
+.radio-call {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 12px;
+  width: 100%;
+  padding: 12px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--color-rule);
+  border-radius: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.radio-call:hover {
+  background: var(--color-rule-tint);
+}
+
+.radio-call[aria-pressed="true"] {
+  background: var(--color-a-tint);
+}
+
+.radio-call.is-new {
+  animation: radio-in 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes radio-in {
+  from {
+    background: var(--color-a-tint);
+  }
+  to {
+    background: var(--color-paper);
+  }
+}
+
+/* The on-air card: fixed to the bottom left like a broadcast radio caption, shown only while
+   the replay runs. Lifted by a soft offset shadow, the page's one raised surface. */
+.radio-onair {
+  position: fixed;
+  left: var(--gutter);
+  bottom: 16px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(440px, calc(100vw - 2 * var(--gutter)));
+  padding: 12px 14px;
+  border: 1px solid var(--color-driver-a);
+  border-radius: var(--radius-control);
+  background: var(--color-paper);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  color: var(--color-ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  animation: onair-in 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.radio-onair:hover {
+  background: var(--color-a-tint);
+}
+
+@keyframes onair-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.radio-wave rect {
+  fill: var(--color-driver-a);
+}
+
+/* One guard for motion. Nothing here animates by default; this keeps it that way. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

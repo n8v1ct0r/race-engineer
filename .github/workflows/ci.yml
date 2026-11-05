@@ -1,0 +1,62 @@
+# CI runs on the synthetic session only. public/data/ is gitignored, so a fresh checkout has no
+# Formula 1 derived files: lap validation skips that root and the /f1 route prerenders 0 pages.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Reads the pnpm version from package.json "packageManager".
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - run: pnpm install --frozen-lockfile
+      # Lint, typecheck, format check, vitest, Python unittest, lap validation, note check, copy lint.
+      - run: pnpm check
+      - run: pnpm build
+
+  # Playwright on the production build at 1440 px and 390 px. With no public/data/ the Formula 1
+  # tests skip and the rest run on /demo. The server gets an empty ANTHROPIC_API_KEY
+  # (playwright.config.ts), so no test calls the model.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      # Chromium into node_modules, plus the system libraries it needs on Ubuntu.
+      - run: pnpm e2e:install --with-deps
+      # Builds the app and serves it on port 3106 (playwright.config.ts webServer).
+      - run: pnpm e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-results
+          path: test-results/
+          retention-days: 7

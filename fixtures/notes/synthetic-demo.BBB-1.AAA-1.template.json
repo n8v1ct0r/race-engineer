@@ -1,0 +1,35 @@
+{
+  "schema": "race-engineer.notes/v1",
+  "kind": "template",
+  "generator": "templateNotes via scripts/check-notes.ts --write-fixtures.",
+  "session_id": "synthetic-demo",
+  "a": "BBB-1",
+  "b": "AAA-1",
+  "notes": [
+    {
+      "finding_id": "gain-1",
+      "text": "T9, you gain 0.243 s. Exit speed 153 km/h against 144 km/h.",
+      "source": "template"
+    },
+    {
+      "finding_id": "gain-2",
+      "text": "T6-7, you gain 0.150 s. Minimum speed 131 km/h against 124 km/h.",
+      "source": "template"
+    },
+    {
+      "finding_id": "gain-3",
+      "text": "T10, you gain 0.078 s.",
+      "source": "template"
+    },
+    {
+      "finding_id": "loss-1",
+      "text": "T1, you lose 0.406 s. You brake 67 m earlier.",
+      "source": "template"
+    },
+    {
+      "finding_id": "loss-2",
+      "text": "T11, you lose 0.179 s.",
+      "source": "template"
+    }
+  ]
+}

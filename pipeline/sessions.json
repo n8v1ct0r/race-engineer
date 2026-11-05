@@ -1,0 +1,34 @@
+{
+  "schema": "race-engineer.sessions/v1",
+  "note": "Sessions for pipeline/export_sessions.py (Nate's decision D2). Always season + round + session code, never an event name: FastF1 resolves fuzzy names wrongly. The expect_* fields are a guard; the export stops if FastF1 resolves a round to a different event.",
+  "sessions": [
+    {
+      "season": 2026,
+      "round": 11,
+      "session": "Q",
+      "expect_event": "Hungarian Grand Prix",
+      "expect_location": "Budapest"
+    },
+    {
+      "season": 2026,
+      "round": 14,
+      "session": "Q",
+      "expect_event": "Spanish Grand Prix",
+      "expect_location": "Madrid"
+    },
+    {
+      "season": 2025,
+      "round": 3,
+      "session": "Q",
+      "expect_event": "Japanese Grand Prix",
+      "expect_location": "Suzuka"
+    },
+    {
+      "season": 2025,
+      "round": 5,
+      "session": "Q",
+      "expect_event": "Saudi Arabian Grand Prix",
+      "expect_location": "Jeddah"
+    }
+  ]
+}
